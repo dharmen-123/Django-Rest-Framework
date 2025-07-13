@@ -34,8 +34,8 @@ def studentapi(req):
         if serializer.is_valid():
             serializer.save()
             res={'msg':"Data is succusfully accept and save"}
-            # jsondata=JSONRenderer().render(res)
-            # return HttpResponse(jsondata,content_type='application/json')
-            return JsonResponse(res)
+            jsondata=JSONRenderer().render(res)
+            return HttpResponse(jsondata,content_type='application/json')
+            # return JsonResponse(res)
         jsondata=JSONRenderer().render(serializer.errors)
         return HttpResponse(jsondata,content_type='application/json')
