@@ -6,7 +6,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 import io
-# Create your views here.
+
+
 def alldata(req):
     data=Student.objects.all()
     serializer=StudentSerializers(data,many=True)
