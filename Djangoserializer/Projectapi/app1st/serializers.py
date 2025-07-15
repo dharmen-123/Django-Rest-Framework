@@ -13,6 +13,6 @@ class StudentSerializers(serializers.Serializer):
      def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.email = validated_data.get('email', instance.email)
-        instance.rollno = validated_data.get('created', instance.created)
+        instance.rollno = validated_data.get('created', instance.rollno)
         instance.save()
         return instance

@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from app1st import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('alldata/',views.alldata,name='alldata'),
     path('singledata/',views.singledata,name='singledata'),
     path('studentapi/',views.studentapi,name='studentapi'),
+    path('patch/<int:pk>/',views.mypatch,name='mapatch'),
 
 ]
