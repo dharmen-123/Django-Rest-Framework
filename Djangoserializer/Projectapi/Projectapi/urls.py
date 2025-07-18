@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path
 from app1st import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('alldata/',views.alldata,name='alldata'),

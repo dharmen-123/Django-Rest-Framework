@@ -7,7 +7,6 @@ from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 import io
 
-
 def alldata(req):
     data=Student.objects.all()
     serializer=StudentSerializers(data,many=True)
@@ -69,17 +68,13 @@ def mypatch(req,pk):
         jsondata=JSONRenderer().render(serializer.errors)
         return HttpResponse(jsondata,content_type='application/json')
     elif req.method=='DELETE':
-        pyolddata=Student.objects.get(id=pk)
-        serializer=StudentSerializers(data=pyolddata,partial=True)
-        if serializer.is_valid():
-            serializer.delete()
-            res={'msg':"Data is successfully updated"}
+        studata=Student.objects.filter(id=pk)
+        if studata:
+            studata=Student.objects.get(id=pk)
+            studata.delete()
+            res={'msg':"Data  successfully Delete"}
             jsondata=JSONRenderer().render(res)
             return HttpResponse(jsondata,content_type='application/json')
-            # return JsonResponse(res)
         jsondata=JSONRenderer().render(serializer.errors)
         return HttpResponse(jsondata,content_type='application/json')
-        pass
-
-       
-
+  
