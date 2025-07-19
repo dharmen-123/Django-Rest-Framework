@@ -9,6 +9,8 @@ import io
 
 # Create your views here.
 
+######## All Methods in function 
+
 @csrf_exempt
 def studentapi(req):
     if req.method=="GET":
