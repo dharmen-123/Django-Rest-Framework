@@ -73,6 +73,3 @@ def studentapi(req):
                 res={'msg':"Data is not found"}
                 jsondata=JSONRenderer().render(res)
                 return HttpResponse(jsondata,content_type='application/json')
-    
-        
-    # return HttpResponse("data not found")
