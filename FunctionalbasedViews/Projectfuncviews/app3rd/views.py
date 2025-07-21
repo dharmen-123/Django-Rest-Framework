@@ -31,7 +31,7 @@ def singledata(req, pk):
         
         elif req.method=='PUT':
             stu = Student.objects.get(id=pk)
-            serializer = StudentSerializer(stu, data=request.data,partial=True)
+            serializer = StudentSerializer(stu, data=req.data,partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
