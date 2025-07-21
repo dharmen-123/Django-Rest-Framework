@@ -22,5 +22,5 @@ from app3rd import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('listdata/',views.listdata),
-    path('singledata/',views.singledata),
+    path('singledata/<int:pk>/',views.singledata),
 ]
