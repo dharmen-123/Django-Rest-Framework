@@ -20,7 +20,7 @@ def listdata(req):
             return Response(serializer.data)
         return Response(serializer.errors)
 
-@api_view(['GET','PUT','PATCH','DELETE'])    
+@api_view(['GET','PUT','DELETE'])    
 def singledata(req, pk):
     id = Student.objects.filter(id=pk)
     if id:
@@ -42,7 +42,7 @@ def singledata(req, pk):
 
         
         elif req.method=='DELETE':
-            stu = Student.object.get(id=pk)
+            stu = Student.objects.get(id=pk)
             stu.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
