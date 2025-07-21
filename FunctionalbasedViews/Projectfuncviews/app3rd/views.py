@@ -30,12 +30,16 @@ def singledata(req, pk):
             return Response(serializer.data)
         
         elif req.method=='PUT':
-            stu = Student.objects.get(id=pk)
-            serializer = StudentSerializer(stu, data=req.data,partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors)
+            try: 
+               stu = Student.objects.get(id=pk)
+               serializer = StudentSerializer(stu,data=req.data,partial=True)
+               if serializer.is_valid():
+                   serializer.save()
+                   return Response(serializer.data)
+               return Response(serializer.errors)
+            except Student.DoesNotExist:
+               return Response({'error': 'Data not found'}, status=404)
+
         
         elif req.method=='DELETE':
             stu = Student.object.get(id=pk)
