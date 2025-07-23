@@ -50,3 +50,4 @@ class singledata(generics.RetrieveUpdateDestroyAPIView,listdata):
     # queryset = Student.objects.all()
     # serializer_class = StudentSerializer
     pass
+ 
