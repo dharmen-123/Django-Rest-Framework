@@ -41,13 +41,21 @@ from rest_framework import generics
 
 
 
-class listdata(generics.ListCreateAPIView):
+# class listdata(generics.ListCreateAPIView):
+#     queryset = Student.objects.all()
+#     serializer_class = StudentSerializer
+
+
+# class singledata(generics.RetrieveUpdateDestroyAPIView,listdata):
+#     # queryset = Student.objects.all()
+#     # serializer_class = StudentSerializer
+#     pass
+
+ ############------------ VIEWSET BASED VIEWS ---------------################
+from rest_framework import  viewsets
+class StudentViewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-
-
-class singledata(generics.RetrieveUpdateDestroyAPIView,listdata):
-    # queryset = Student.objects.all()
-    # serializer_class = StudentSerializer
-    pass
- 
