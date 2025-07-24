@@ -19,9 +19,12 @@ from django.urls import path , include
 
 from appclass import views
 from appclass.routers import router
+
 urlpatterns = [
     # path('admin/', admin.site.urls),
     # path('listdata/',views.listdata.as_view()),
     # path('singledata/<int:pk>/',views.singledata.as_view()),
     path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls'))
+    
 ]
