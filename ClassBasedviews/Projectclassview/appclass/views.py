@@ -3,7 +3,7 @@ from .models import Student
 from .serializers import StudentSerializer
 from rest_framework import mixins
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 # Create your views here.
 
  ################# MIXIN BASED VIEWS ###############
@@ -58,6 +58,6 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
