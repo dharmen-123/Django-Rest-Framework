@@ -1,5 +1,5 @@
 """
-URL configuration for Projectclassview project.
+URL configuration for Projectclasses project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -15,19 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path , include
-
-from appclass import views
-from appclass.routers import router
-from rest_framework.authtoken import views
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('listdata/',views.listdata.as_view()),
-    # path('singledata/<int:pk>/',views.singledata.as_view()),
-    path('', include(router.urls)),
-    # path('api-auth/', include('rest_framework.urls')), 
-    path('api-token-auth/', views.obtain_auth_token)
 ]
-
-
