@@ -1,0 +1,513 @@
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Cart, UserRegistration, UserProfile, Address, Feedback
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+def show_admin_dashboard(request):
+    """
+    The function show_admin_dashboard handles requests to display and manage products in an admin
+    dashboard, including adding new items to a cart.
+    
+    :param request: The request parameter in the show_admin_dashboard function is an object that
+    contains information about the current HTTP request. It includes details such as the request method
+    (GET, POST, etc.), user session data, form data, uploaded files, and more. In this context, the
+    function is
+    :return: The show_admin_dashboard function returns a response based on the conditions and actions
+    taken within the function. It returns a redirect to the admin login page if the admin is not logged
+    in, it returns a redirect to the admin dashboard if the form is submitted successfully, and it
+    renders the admin dashboard template with context data if the request method is not POST.
+    """
+    if not request.session.get('admin_id'):
+        messages.error(request, "Login required to access admin dashboard")
+        return redirect('admin_login')
+    if request.method == 'POST':
+        try:
+            product_name = request.POST.get('product_name')
+            product_price = request.POST.get('product_price')
+            product_quantity = request.POST.get('product_quantity')
+            product_image = request.FILES.get('product_image')
+            product_description = request.POST.get('product_description')
+
+            if not all([product_name, product_price, product_quantity]):
+                messages.error(request, "Please fill all required fields")
+                return redirect('admin_dashboard')
+
+            Cart.objects.create(
+                product_name=product_name,
+                product_price=product_price,
+                product_quantity=product_quantity,
+                product_image=product_image,
+                product_description=product_description
+            )
+            messages.success(request, 'Item added successfully!')
+            return redirect('admin_dashboard')
+
+        except Exception as e:
+            messages.error(request, f'Error adding item: {str(e)}')
+            return redirect('admin_dashboard')
+
+    context = {
+        'all_products': Cart.objects.all(),
+        'message': 'Please add items to your cart.'
+    }
+    return render(request, 'admin_dashboard.html', context)
+
+    """
+    The function product_inventory checks if the user is logged in as an admin, retrieves all products
+    from the Cart model, and displays them on the product.html template.
+    
+    :param request: The request parameter in the product_inventory function is typically an
+    HttpRequest object that represents the current HTTP request. It contains information about the
+    request made by the client, such as the user's session, GET and POST parameters, and more. In this
+    context, the function is likely part of
+    :return: The product_inventory function is returning a rendered template 'product.html' with a
+    context containing all the products retrieved from the Cart model. If the user is not logged in as
+    an admin, it will display an error message and redirect to the admin login page. If there are no
+    products available in the Cart model, it will display an info message.
+    """
+def product_inventory(request):
+    if not request.session.get('admin_id'):
+        messages.error(request, "Login required to access admin dashboard")
+        return redirect('admin_login')
+    products = Cart.objects.all()
+    if not products.exists():
+        messages.info(request, "No products available")
+    return render(request, 'product.html', {'all_products': products})
+
+
+    """
+    The function calculate_cart_item_count calculates the number of items in a shopping cart stored in
+    a session.
+    
+    :param request: The calculate_cart_item_count function takes a request object as a parameter.
+    This object likely contains information about the current user session, such as session data,
+    cookies, and other request-related information. In this function, it retrieves the 'cart' data from
+    the session and returns the number
+    :return: The function calculate_cart_item_count returns the number of items in the shopping cart
+    stored in the session data of the request. It calculates the count by getting the 'cart' key from
+    the session data and returning the length of the cart dictionary.
+    """
+def calculate_cart_item_count(request):
+    cart = request.session.get('cart', {})
+    return len(cart)
+
+
+    """
+    The function show_user_dashboard retrieves user information and cart items to display on the user
+    dashboard page.
+    
+    :param request: The request parameter in the show_user_dashboard function is typically an
+    HttpRequest object that represents the current HTTP request. It contains information about the
+    request made by the client, such as headers, method, user session, and more. In this context, it is
+    used to access session data and
+    :return: The show_user_dashboard function is returning a rendered template 'user_dashboard.html'
+    along with the context data containing 'cart_items', 'user_id', and 'total_items'.
+    """
+def show_user_dashboard(request):
+    user_id = request.session.get('user_id', None)
+    total_items = calculate_cart_item_count(request)
+    cart_items = Cart.objects.all()
+    return render(request, 'user_dashboard.html', {
+        'cart_items': cart_items,
+        'user_id': user_id,
+        'total_items': total_items
+    })
+
+
+    """
+    The function add_item_to_cart adds a product to the user's cart in a web application, handling
+    quantity, user authentication, and session management.
+    
+    :param request: The request parameter in the add_item_to_cart function is typically an
+    HttpRequest object that represents the current request from the user's browser. It contains
+    information about the request, such as the user's session, POST data, and other metadata related to
+    the request. In this function, the
+    :param id: The id parameter in the add_item_to_cart function represents the unique identifier of
+    the product that is being added to the cart. This identifier is used to retrieve the product details
+    from the database and store them in the user's cart session
+    :return: The function add_item_to_cart is returning a redirect response to the 'user_dashboard'
+    URL after adding an item to the cart or displaying appropriate messages based on the conditions met
+    during the process.
+    """
+def add_item_to_cart(request, id):
+    quantity = request.POST.get("quantity")
+    if not request.session.get('user_id'):
+        messages.error(request, "Login required to add items to cart")
+        return redirect('user_login')
+
+    product = get_object_or_404(Cart, id=id)
+
+    if 'cart' not in request.session:
+        request.session['cart'] = {}
+    cart = request.session['cart']
+    product_key = str(id)
+
+    if product_key in cart:
+        messages.warning(request, "Item is already in your cart!")
+    else:
+        cart[product_key] = {
+            'id': product.id,
+            'name': product.product_name,
+            'price': str(product.product_price),
+            'quantity': quantity,
+            'image': product.product_image.url if product.product_image else None,
+            'description': product.product_description or ""
+        }
+        request.session.modified = True
+        messages.success(request, f"{product.product_name} added to cart!")
+
+    return redirect('user_dashboard')
+
+
+    """
+    The function show_cart_view retrieves cart items from the session and calculates the total price
+    and subtotal before rendering the cart view.
+    
+    :param request: The show_cart_view function takes a request parameter, which is typically an
+    HttpRequest object in Django. This parameter is used to access session data, display messages, and
+    render the cart.html template with the necessary context data
+    :return: The show_cart_view function returns a rendered template 'cart.html' with the context data
+    including 'cart_items', 'total_items', and 'subtotal'. If the cart is empty, it also displays a
+    message informing the user that the cart is empty.
+    """
+def show_cart_view(request):
+    cart = request.session.get('cart', {})
+    if not cart:
+        messages.info(request, "Your cart is empty")
+        return render(request, 'cart.html', {'cart_items': [], 'total_price': 0, 'total_items': 0, 'subtotal': 0})
+
+    cart_items = []
+    subtotal = 0
+
+    for item in cart.values():
+        total_price = float(item['price']) * int(item['quantity'])
+        subtotal += total_price
+        cart_items.append({
+            'price': item['price'],
+            'quantity': item['quantity'],
+            'total_price': total_price,
+            'id': item['id'],
+            'name': item['name'],
+            'image': item['image'],
+            'description': item['description'],
+        })
+
+    return render(request, 'cart.html', {
+        'cart_items': cart_items,
+        'total_items': len(cart_items),
+        'subtotal': subtotal
+    })
+
+
+    """
+    This Python function removes an item from a shopping cart stored in the session and displays a
+    success message.
+    
+    :param request: The request parameter in the remove_item_from_cart function is typically an
+    HttpRequest object that represents the current request from the client. It contains information
+    about the request, such as the user's session, GET and POST data, headers, and more. In this
+    context, it is used to
+    :param id: The id parameter in the remove_item_from_cart function represents the unique
+    identifier of the item that needs to be removed from the cart
+    :return: a redirect to the 'cart_view' URL after removing an item from the cart and displaying a
+    success message.
+    """
+def remove_item_from_cart(request, id):
+    cart = request.session.get('cart', {})
+    if str(id) in cart:
+        del cart[str(id)]
+        request.session.modified = True
+        messages.success(request, "Item removed from cart")
+    return redirect('cart_view')
+
+
+    """
+    The function retrieves all products from the Cart model and displays them on the admin dashboard,
+    showing a message if no products are available.
+    
+    :param request: The request parameter in the get_all_products function is typically an
+    HttpRequest object that represents the current request from the user. It contains information about
+    the request, such as the user's session, GET and POST data, and other metadata related to the
+    request. This parameter is commonly used in
+    :return: The function get_all_products is returning a rendered template 'admin_dashboard.html'
+    with a context containing all products retrieved from the Cart model. The products are passed to the
+    template with the key 'all_products'. If there are no products available, a message "No products
+    available" is displayed using the messages framework.
+    """
+def get_all_products(request):
+    products = Cart.objects.all()
+    if not products.exists():
+        messages.info(request, "No products available")
+    return render(request, 'admin_dashboard.html', {'all_products': products})
+
+
+def delete_product_item(request, id):
+    """
+    This function deletes a product item from a cart and updates the session data accordingly.
+    
+    :param request: The request parameter in the delete_product_item function is an object that
+    represents the HTTP request made by the client to the server. It contains information about the
+    request, such as the method used (GET, POST, etc.), headers, user data, and any data sent in the
+    request
+    :param id: The id parameter in the delete_product_item function is used to identify the specific
+    product item that needs to be deleted from the Cart. It is typically the unique identifier of the
+    product item in the database, allowing the function to locate and delete the correct item from the
+    Cart
+    :return: The function delete_product_item is returning a redirect response. If the request method
+    is not 'POST', it will redirect to the 'admin_dashboard' view. If the item is successfully deleted,
+    it will redirect to the 'product' view.
+    """
+    if request.method == 'POST':
+        try:
+            product = get_object_or_404(Cart, id=id)
+            product.delete()
+            messages.success(request, 'Item deleted successfully.')
+            cart = request.session.get('cart', {})
+            if str(id) in cart:
+                del cart[str(id)]
+                request.session['cart'] = cart
+                request.session.modified = True
+        except Exception as e:
+            messages.error(request, f'Error deleting item: {str(e)}')
+        return redirect('product')
+    return redirect('admin_dashboard')
+
+
+def admin_login_view(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        if email == "premv6264@gmail.com" and password == "Prem@123":
+            messages.success(request, 'Welcome Admin!')
+            request.session['admin_id'] = 1984
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Incorrect Email or Password')
+            return redirect('admin_login')
+    return render(request, 'admin_login.html', {"user": "admin"})
+
+
+def register_user(request):
+    if request.method == "POST":
+        data = request.POST
+        name = data.get("user_name")
+        email = data.get("user_email")
+        contact = data.get("user_contect")
+        password = data.get("user_password")
+        cpassword = data.get("user_cpassword")
+
+        if UserRegistration.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists!')
+            return redirect('registration')
+
+        if password != cpassword:
+            messages.error(request, 'Passwords do not match!')
+            return redirect('registration')
+
+        UserRegistration.objects.create(name=name, email=email, contact=contact, password=password)
+        messages.success(request, 'Registration successful! Please login.')
+        return redirect('user_login')
+    return render(request, 'registration.html')
+
+
+def user_login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get("user_email")
+        password = request.POST.get("user_password")
+        try:
+            user = UserRegistration.objects.get(email=email)
+            if user.password == password:
+                messages.success(request, 'Login successful!')
+                request.session['user_id'] = user.id
+                return redirect('user_dashboard')
+            else:
+                messages.error(request, 'Incorrect password!')
+        except UserRegistration.DoesNotExist:
+            messages.error(request, 'Email not registered. Please sign up first.')
+        return redirect('user_login')
+    return render(request, 'login.html')
+
+
+def manage_user_address(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        messages.error(request, "Login required.")
+        return redirect('user_login')
+
+    user = UserRegistration.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        city = request.POST.get('city')
+        address_text = request.POST.get('address')
+        zipcode = request.POST.get('zipcode')
+
+        if all([city, address_text, zipcode]):
+            if not Address.objects.filter(address=address_text).exists():
+                Address.objects.create(user=user, city=city, address=address_text, zipcode=zipcode)
+                messages.success(request, "Address added successfully.")
+            else:
+                messages.warning(request, "This address already exists.")
+        else:
+            messages.error(request, "All fields are required.")
+        return redirect('useraddress')
+
+    addresses = Address.objects.filter(user=user)
+    return render(request, 'address_form.html', {'addresses': addresses, 'user': user})
+
+
+@csrf_exempt
+def delete_user_address(request, id):
+    if request.method == 'POST':
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({'error': 'Unauthorized'}, status=403)
+        try:
+            address = Address.objects.get(id=id, user_id=user_id)
+            address.delete()
+            return JsonResponse({'success': True})
+        except Address.DoesNotExist:
+            return JsonResponse({'error': 'Address not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def select_user_address(request):
+    if request.method == 'POST':
+        selected_address_id = request.POST.get('selected_address')
+        request.session['selected_address_id'] = selected_address_id
+        messages.success(request, "Address selected successfully.")
+        return redirect('checkout')
+    return redirect('useraddress')
+
+
+def checkout_view(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        messages.error(request, "Please login first.")
+        return redirect('user_login')
+
+    try:
+        user = UserRegistration.objects.get(id=user_id)
+    except UserRegistration.DoesNotExist:
+        messages.error(request, "User not found.")
+        return redirect('user_login')
+
+    selected_address = None
+    selected_address_id = request.session.get('selected_address_id')
+    if selected_address_id:
+        try:
+            selected_address = Address.objects.get(id=selected_address_id, user=user)
+        except Address.DoesNotExist:
+            messages.warning(request, "Selected address not found.")
+
+    session_cart = request.session.get('cart', {})
+    cart_items = []
+    total_price = 0
+
+    for item in session_cart.values():
+        item_total = float(item['price']) * int(item['quantity'])
+        total_price += item_total
+        cart_items.append({**item, 'total': item_total})
+
+    return render(request, 'checkout.html', {
+        'user': user,
+        'selected_address': selected_address,
+        'cart_items': cart_items,
+        'total_price': total_price
+    })
+
+
+def view_product_detail(request, id):
+    user_id = request.session.get('user_id', None)
+    total_items = calculate_cart_item_count(request)
+    product = get_object_or_404(Cart, id=id)
+    return render(request, 'product_view.html', {
+        'product': product,
+        'user_id': user_id,
+        'total_items': total_items
+    })
+
+
+def user_logout_view(request):
+    if 'user_id' in request.session:
+        del request.session['user_id']
+        messages.success(request, "Logout successful")
+        return redirect('user_dashboard')
+    messages.error(request, "You are not logged in")
+    return redirect('user_login')
+
+
+def admin_logout_view(request):
+    if 'admin_id' in request.session:
+        del request.session['admin_id']
+        messages.success(request, "Logout successful")
+        return redirect('admin_login')
+    messages.error(request, "You are not logged in")
+    return redirect('admin_login')
+
+
+def show_all_users(request):
+    users = UserRegistration.objects.all()
+    usercount = users.count()
+    if not users.exists():
+        messages.info(request, "No users found")
+    return render(request, "total_user.html", {"users": users, "usercount": usercount})
+
+
+def view_all_feedbacks(request):
+    feedback = Feedback.objects.all()
+    return render(request, "all_feedback.html", {"data": feedback})
+
+
+def delete_user_account(request, id):
+    if request.method == 'POST':
+        try:
+            user = UserRegistration.objects.get(id=id)
+            user.delete()
+            messages.success(request, 'User deleted successfully.')
+        except UserRegistration.DoesNotExist:
+            messages.error(request, 'User not found')
+        except Exception as e:
+            messages.error(request, f'Error deleting user: {str(e)}')
+    return redirect('all_user')
+
+
+def submit_user_feedback(request, id):
+    if not request.session.get('user_id'):
+        messages.error(request, 'Please login to give feedback!')
+        return redirect('user_login')
+    user = UserRegistration.objects.filter(id=id).first()
+    if not user:
+        messages.error(request, 'User not found!')
+        return redirect('user_dashboard')
+    if request.method == 'POST':
+        feedback_text = request.POST.get('feedback', '').strip()
+        if not feedback_text:
+            messages.error(request, 'Feedback cannot be empty!')
+        else:
+            Feedback.objects.create(
+                name=user.name,
+                email=user.email,
+                contact=user.contact,
+                feedback=feedback_text
+            )
+            messages.success(request, 'Thank you for your feedback!')
+        return redirect('user_dashboard')
+    return render(request, 'user_dashboard.html')
+
+
+def update_user_profile(request):
+    if not request.session.get('user_id'):
+        messages.error(request, 'Please login to update profile!')
+        return redirect('user_login')
+    if request.method == 'POST':
+        data = request.POST
+        name = data.get("name")
+        email = data.get("email")
+        contact = data.get("contact")
+        image = request.FILES.get("image")
+        UserProfile.objects.create(name=name, email=email, contact=contact, image=image)
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('userprofile')
+    return render(request, 'profile.html', {'user': request.session.get('user_id')})
