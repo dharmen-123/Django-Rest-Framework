@@ -8,4 +8,5 @@ class Student(models.Model):
     codeno=models.IntegerField()
     class Meta:
         db_table='Student'
-        verbose_name="Studentdata"
+        # verbose_name="Studentdata"
+        verbose_name_plural="Studentdata"
