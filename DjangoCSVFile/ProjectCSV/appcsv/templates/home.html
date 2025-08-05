@@ -1,0 +1,10 @@
+
+<br><br><br>
+
+<h1>Document Upload</h1>
+<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+     <input type="file" name="csvfile" id=""><br>
+     <button type="submit">upload</button>
+</form>
+<br>
