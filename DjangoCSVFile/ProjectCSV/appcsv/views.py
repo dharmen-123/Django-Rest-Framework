@@ -4,7 +4,6 @@ import csv
 import io
 
 # Create your views here.
-
 def upload(req):
     if req.method=='POST':
         csvfile=req.FILES['csvfile']
@@ -22,3 +21,4 @@ def upload(req):
         return render(req,'home.html')
     else:
         return render(req,'home.html')
+
