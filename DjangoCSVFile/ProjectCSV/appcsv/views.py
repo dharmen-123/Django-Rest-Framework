@@ -1,11 +1,9 @@
 from django.shortcuts import render,redirect
-
 from .models import Employee
 import csv
 import io
 
 # Create your views here.
-
 
 def upload(req):
     if req.method=='POST':
