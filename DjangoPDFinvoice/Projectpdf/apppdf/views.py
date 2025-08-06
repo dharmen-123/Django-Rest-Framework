@@ -1,17 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from .models import Invoice
-# Create your views here.
 from django.http import HttpResponse
-import openxyl
-
+import openpyxl
 
 def home(req):
     return render(req,'home.html')
 
 
 def exportxlsx(req):
-    wb=openxyl.Workbook
+    wb=openpyxl.Workbook()
     wb=wb.active
+    wb.title="Data"
     pass
 
 import csv
