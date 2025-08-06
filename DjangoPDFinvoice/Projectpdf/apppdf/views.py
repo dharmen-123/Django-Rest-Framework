@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import Invoice
 # Create your views here.
+from django.http import HttpResponse
+import openxyl
 
 
 def home(req):
