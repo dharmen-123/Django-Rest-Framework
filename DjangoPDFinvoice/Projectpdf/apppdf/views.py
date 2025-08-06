@@ -8,12 +8,16 @@ import openxyl
 def home(req):
     return render(req,'home.html')
 
+
 def exportxlsx(req):
+    wb=openxyl.Workbook
+    wb=wb.active
     pass
 
 import csv
 def exportcsv(req):
     pass
+
 
 def exportpdf(req):
     pass
