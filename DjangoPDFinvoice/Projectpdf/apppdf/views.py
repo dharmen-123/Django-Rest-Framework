@@ -14,7 +14,6 @@ def exportxlsx(req):
     wb.append(["ID","Name","Email","DOB","Contact","City","Price"])
     for i in Invoice.objects.all():
         wb.append([i.id,i.name,i.email,i.dob,i.contact,i.city,i.price])
-
     response=HttpResponse(content_type="application/vnd.openxmlformats-officedocuments.spreedsheetml.sheet")
     response('Content-Disposition',"attachment")
     wb.save(response)
@@ -25,7 +24,5 @@ import csv
 def exportcsv(req):
     pass
 
-
 def exportpdf(req):
     pass
-
