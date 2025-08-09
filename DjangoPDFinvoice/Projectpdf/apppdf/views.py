@@ -19,7 +19,6 @@ def exportxlsx(req):
     response('Content-Disposition',"attachment")
     wb.save(response)
     return response
-    pass
 
 import csv
 def exportcsv(req):
