@@ -2,7 +2,7 @@ from django.shortcuts import render , redirect
 from .models import Invoice
 from django.http import HttpResponse
 import openpyxl
-
+from datetime import datetime
 
 
 def home(req):
@@ -30,12 +30,14 @@ def exportcsv(req):
         writer.append([i.id,i.name,i.email,i.dob,i.contact,i.city,i.price])
     return response
 
+
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 def exportpdf(req):
-    
-    pass
+    currentd=datetime.now()
+    date=currentd.strftime("%B %d ,%Y")
 
+    pass
 
 # from django.shortcuts import render
 # from django.http import HttpResponse

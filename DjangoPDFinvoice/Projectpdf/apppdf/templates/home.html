@@ -8,7 +8,11 @@
 <body>
     
     <h1>Dawonload data</h1>
-
+    <form action="{% url 'xlsx' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit">Export xlsx</button>
+    </form><br><br>
+    
     <form action="{% url 'csv' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <button type="submit">Export csv</button>
@@ -19,9 +23,6 @@
         <button type="submit">Export pdf</button>
     </form><br><br>
 
-    <form action="{% url 'xlsx' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <button type="submit">Export xlsx</button>
-    </form><br><br>
+
 </body>
 </html>
