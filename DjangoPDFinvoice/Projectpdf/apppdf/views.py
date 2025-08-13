@@ -36,7 +36,12 @@ from xhtml2pdf import pisa
 def exportpdf(req):
     currentd=datetime.now()
     date=currentd.strftime("%B %d ,%Y")
-
+    templatepath='pdftemplate.html'
+    data={'record':Invoice.objects.all().values()}
+    template=get_template(templatepath)
+    html=template.render(data)
+    response=HttpResponse(content_type="application/pdf")
+    response['Content-Disposition']="attachment;filename=Invoice.pdf"
     pass
 
 # from django.shortcuts import render
