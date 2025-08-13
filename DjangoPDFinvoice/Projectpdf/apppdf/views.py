@@ -22,10 +22,18 @@ def exportxlsx(req):
 
 import csv
 def exportcsv(req):
-    
-    pass
+    response=HttpResponse(content_type="text/csv")
+    response['Content-Disposition']="attachment;filename=Studentdata.csv"
+    writer=csv.writer(response)
+    writer.writerow(["ID","Name","Email","DOB","Contact","City","Price"])
+    for i in Invoice.objects.all():
+        writer.append([i.id,i.name,i.email,i.dob,i.contact,i.city,i.price])
+    return response
 
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 def exportpdf(req):
+    
     pass
 
 
