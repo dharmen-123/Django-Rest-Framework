@@ -42,6 +42,11 @@ def exportpdf(req):
     html=template.render(data)
     response=HttpResponse(content_type="application/pdf")
     response['Content-Disposition']="attachment;filename=Invoice.pdf"
+    pisa_status=pisa.CreatePDF(html,dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('We had some error <pre>' + html + '</pre>')
+    return response
     pass
 
 # from django.shortcuts import render
