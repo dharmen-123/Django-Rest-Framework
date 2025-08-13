@@ -37,7 +37,15 @@ def exportpdf(req):
     currentd=datetime.now()
     date=currentd.strftime("%B %d ,%Y")
     templatepath='pdftemplate.html'
-    data={'record':Invoice.objects.all().values()}
+    # data={'record':Invoice.objects.all().values()}
+    data={
+        'name':"Dharmendra",
+        'email':"abcd@gmail.com",
+        'contact':9684958360,
+        'city':"Bhopal",
+        'date':date,
+        'price':8560
+    }
     template=get_template(templatepath)
     html=template.render(data)
     response=HttpResponse(content_type="application/pdf")
