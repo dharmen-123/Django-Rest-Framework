@@ -27,7 +27,7 @@ def exportcsv(req):
     writer=csv.writer(response)
     writer.writerow(["ID","Name","Email","DOB","Contact","City","Price"])
     for i in Invoice.objects.all():
-        writer.append([i.id,i.name,i.email,i.dob,i.contact,i.city,i.price])
+        writer.writerow([i.id,i.name,i.email,i.dob,i.contact,i.city,i.price])
     return response
 
 
