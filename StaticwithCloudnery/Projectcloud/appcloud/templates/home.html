@@ -142,6 +142,36 @@
                         </div>
                     </div>
                 </div>
+              </div>
+         </section>
+
+         <section>
+          <div style="display: flex; flex-wrap: wrap;">
+                {% for student in data %}
+  <div class="student-card" style="border: 1px solid #ccc; padding: 16px; width: 300px; margin-bottom: 20px;">
+    <h3>{{ student.name }}</h3>
+    <p><strong>Email:</strong> {{ student.email }}</p>
+    <p><strong>Password:</strong> {{ student.password }}</p>
+    <p><strong>Confirm Password:</strong> {{ student.cpassword }}</p>
+
+    {% if student.image %}
+      <img src="{{ student.image.url }}" alt="Student Image" style="width: 100%; height: auto; margin-top: 10px;" />
+    {% else %}
+      <p>No image uploaded.</p>
+    {% endif %}
+
+    {% if student.video %}
+      <video controls style="width: 100%; margin-top: 10px;">
+        <source src="{{ student.video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    {% else %}
+      <p>No video uploaded.</p>
+    {% endif %}
+  </div>
+{% empty %}
+  <p>No student data available.</p>
+{% endfor %}
 </div>
          </section>
       </main>
