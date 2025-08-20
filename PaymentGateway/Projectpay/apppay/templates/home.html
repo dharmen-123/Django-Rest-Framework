@@ -6,7 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-
+     
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit voluptates quidem, dolor cum mollitia laboriosam, repudiandae, ex ab accusantium ullam voluptatum ipsam iure amet eaque assumenda! Nemo magnam labore non.</p>
 
     <h1>Click the payment of 2000</h1>
     <form action="{% url 'payment' %}" method="post" enctype="multipart/form-data">
@@ -15,9 +16,23 @@
        <input type="number" name=amount value="2000" hidden>
         <button type="submit">Pay Now</button>
     </form>
+    {% if payment %}
      <form action="{% url 'paymenthandle' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-          
+           <script src="https://checkout.razorpay.com/v1/checkout.js"
+          data-key="{{payment.razorpay_key}}"
+          data-amount="{{ payment.amount }}"
+          data-currency="{{payment.currency}}"
+          data-order_id="{{ payment.order_id }}"
+          data-buttontext="Pay with Razorpay"
+          data-name="KB Group of Industries"
+          data-description="Test Transaction"
+          data-image="https://yourdomain.com/logo.png"
+          data-prefill.name="Dharmendra"
+          data-prefill.email="dharmendra@example.com"
+          data-theme.color="#0555f6ef">
+      </script>
      </form>    
+     {% endif %}
 </body>
 </html>
