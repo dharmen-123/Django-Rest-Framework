@@ -13,7 +13,7 @@
     <form action="{% url 'payment' %}" method="post" enctype="multipart/form-data">
        {% csrf_token %}
        <h2>Total amount : 2000</h2>
-       <input type="number" name=amount value="2000" hidden>
+       {% comment %} <input type="number" name=amount value="2000" hidden> {% endcomment %}
         <button type="submit">Pay Now</button>
     </form>
     {% if payment %}
@@ -33,6 +33,11 @@
           data-theme.color="#0555f6ef">
       </script>
      </form>    
+     {% endif %}
+
+     {% if success %}
+     
+      <h1 style="color: green; align-items: center; text-align: center;">Payment successfull</h1>
      {% endif %}
 </body>
 </html>
