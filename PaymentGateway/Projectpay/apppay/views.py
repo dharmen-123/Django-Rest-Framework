@@ -4,7 +4,6 @@ from .models import Payment
 # Create your views here.
 
 def home(request):
-
     return render(request,'home.html')
 
 def payment(request):
