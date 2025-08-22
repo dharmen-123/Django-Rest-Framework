@@ -1,10 +1,11 @@
 
 <br><br><br>
 <h1>Data from Excel to transfer in database</h1>
-<h1>Document Upload</h1>
+<h1>Document Upload in CSV file</h1>
 <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
      <input type="file" name="csvfile" id="" accept=".csv"><br>
      <button type="submit">upload</button>
+
 </form>
 <br>
