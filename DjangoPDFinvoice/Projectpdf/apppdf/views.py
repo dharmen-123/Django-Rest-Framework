@@ -4,7 +4,6 @@ from django.http import HttpResponse
 import openpyxl
 from datetime import datetime
 
-
 def home(req):
     return render(req,'home.html')
 
