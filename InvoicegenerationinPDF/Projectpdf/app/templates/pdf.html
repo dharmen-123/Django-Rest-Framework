@@ -1,16 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-   <style>
-
-    
-   </style>
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    
+<body class="bg-light">
+  <div class="container my-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Invoice</h4>
+      </div>
+      <div class="card-body">
 
+        <!-- Company Details -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5>Company Info</h5>
+            <p>
+              <strong>ShopEase Pvt Ltd</strong><br>
+              123 Market Street<br>
+              New Delhi, India<br>
+              support@shopease.com<br>
+              +91 98765 43210
+            </p>
+          </div>
+
+          <!-- User Details -->
+          <div class="col-md-6 text-md-end">
+            <h5>Customer Info</h5>
+            <p>
+              <strong>Dharmendra Kumar</strong><br>
+              dharmendra@example.com<br>
+              Kalapipal, Madhya Pradesh<br>
+              +91 91234 56789
+            </p>
+          </div>
+        </div>
+
+        <!-- Invoice Metadata -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <p><strong>Invoice #: </strong> INV-20250825</p>
+            <p><strong>Date: </strong> August 25, 2025</p>
+          </div>
+        </div>
+
+        <!-- Product Table -->
+        <div class="table-responsive mb-4">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Wireless Mouse</td>
+                <td>Ergonomic, USB-C</td>
+                <td>2</td>
+                <td>₹799</td>
+                <td>₹1,598</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Bluetooth Headphones</td>
+                <td>Noise Cancelling</td>
+                <td>1</td>
+                <td>₹2,499</td>
+                <td>₹2,499</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="5" class="text-end"><strong>Subtotal</strong></td>
+                <td>₹4,097</td>
+              </tr>
+              <tr>
+                <td colspan="5" class="text-end"><strong>GST (18%)</strong></td>
+                <td>₹737.46</td>
+              </tr>
+              <tr>
+                <td colspan="5" class="text-end"><strong>Total</strong></td>
+                <td><strong>₹4,834.46</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center">
+          <p class="text-muted">Thank you for shopping with ShopEase!</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </body>
 </html>

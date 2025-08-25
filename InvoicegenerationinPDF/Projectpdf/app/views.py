@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from datetime import datetime
+from .models import User
 # Create your views here.
 import openpyxl
 from django.template.loader import get_template
@@ -11,7 +12,7 @@ def home(request):
 
 def exportpdf(request):
     cdata=datetime.now()
-    date=cdata.strftime()
+    date=cdata.strftime("%B %d ,%Y")
     templatepath='pdf.html'
     data=User.objects.get(id=2)
     detail={
