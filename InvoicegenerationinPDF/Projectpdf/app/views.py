@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.http import HttpResponse,JsonResponse
 from datetime import datetime
 # Create your views here.
 import openpyxl
@@ -11,7 +12,19 @@ def home(request):
 def exportpdf(request):
     cdata=datetime.now()
     date=cdata.strftime()
-    template='pdf.html'
-    data=User.objects
-
-    pass
+    templatepath='pdf.html'
+    data=User.objects.get(id=2)
+    detail={
+        'name':data.name,
+        'email':data.email,
+        'number':data.number,
+        'date':date,
+        'city':data.city
+    }
+    template=get_template(templatepath)
+    html=template.render(detail)
+    response=HttpResponse(content_type='application/pdf')
+    response['Content-Disposition']="attachment;filename=Invoice.pdf"
+    pisa_state=pisa.CreatePDF(html,data=response)
+    
+    return response
