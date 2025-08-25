@@ -56,14 +56,6 @@ def exportpdf(req):
     return response
     pass
 
-# from django.shortcuts import render
-# from django.http import HttpResponse
-# from.models import Employee
-# import openpyxl
-# # Create your views here.
-# def home(req):
-#     return render(req,'home.html')   
-
 # def export_excel(req):
 #     print("Hello..........")
 #     wkbk = openpyxl.Workbook()
