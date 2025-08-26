@@ -3,7 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <title>Invoice</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 90%;
+    margin: 40px auto;
+  }
+
+  .card {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+  }
+
+  .card-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+  }
+
+  .card-header h4 {
+    margin: 0;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .col-md-6 {
+    width: 50%;
+    padding: 10px;
+  }
+
+  .text-md-end {
+    text-align: right;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+  }
+
+  thead {
+    background-color: #f1f1f1;
+  }
+
+  tfoot td {
+    font-weight: bold;
+  }
+
+  .text-end {
+    text-align: right;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-muted {
+    color: #6c757d;
+  }
+</style>
 </head>
 <body class="bg-light">
   <div class="container my-5">
@@ -30,10 +107,10 @@
           <div class="col-md-6 text-md-end">
             <h5>Customer Info</h5>
             <p>
-              <strong>Dharmendra Kumar</strong><br>
-              dharmendra@example.com<br>
-              Kalapipal, Madhya Pradesh<br>
-              +91 91234 56789
+              <strong>{{name}}</strong><br>
+              {{email}}<br>
+              {{city}}, Madhya Pradesh<br>
+              +91 {{number}}
             </p>
           </div>
         </div>
@@ -42,7 +119,7 @@
         <div class="row mb-4">
           <div class="col-md-6">
             <p><strong>Invoice #: </strong> INV-20250825</p>
-            <p><strong>Date: </strong> August 25, 2025</p>
+            <p><strong>Date: </strong> {{date}}</p>
           </div>
         </div>
 
