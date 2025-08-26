@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import razorpay
 from .models import Payment
+
 # Create your views here.
 
 def home(request):
@@ -32,6 +33,7 @@ def payment(request):
         return render(request,'home.html',{'payment':payment})    
     return render(request,'home.html')
 
+
 def paymenthandle(request):
     if request.method=='POST':
         client = razorpay.Client(auth=("rzp_test_8MpcoTaUXnGlMQ", "wz2Q1xWs4LueA8LZwxIBMuPR"))
@@ -40,7 +42,6 @@ def paymenthandle(request):
             'razorpay_payment_id': request.POST.get('razorpay_payment_id'),
             'razorpay_signature': request.POST.get('razorpay_signature')
         }
-        # Verify the payment signature
         client.utility.verify_payment_signature(params_dict)
         payment = Payment.objects.get(order_id=request.POST.get('razorpay_order_id'))
         payment.payment_id = request.POST.get('razorpay_payment_id')
