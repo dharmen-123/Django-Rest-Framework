@@ -7,10 +7,8 @@ from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 import io
 
-# Create your views here.
 
 ######## All Methods in function 
-
 @csrf_exempt
 def studentapi(req):
     if req.method=="GET":
