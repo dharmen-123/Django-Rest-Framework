@@ -5,7 +5,7 @@ from django.db import models
 class Alumini(models.Model):
     name=models.CharField(max_length=150)
     empid=models.CharField(max_length=150)
-    mobile=models.IntegerField()
+    mobile=models.CharField(max_length=200)
     designation=models.CharField()
     salary=models.CharField()
     city=models.CharField()
