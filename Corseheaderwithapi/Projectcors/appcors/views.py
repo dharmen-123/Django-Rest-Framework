@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Alumini
 # Create your views here.
-
+from django.views.decorators.csrf import csrf_exempt
 from .serializers import Aluminiserializer
 from rest_framework import generics
 
