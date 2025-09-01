@@ -4,4 +4,4 @@ from django.shortcuts import render
 
 
 def hello(rewuwest):
-    pss
+    pass
