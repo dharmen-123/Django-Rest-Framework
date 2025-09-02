@@ -8,7 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 import io
 
 
-######## All Methods in function 
+######## All Methods in one function 
+
 @csrf_exempt
 def studentapi(req):
     if req.method=="GET":
