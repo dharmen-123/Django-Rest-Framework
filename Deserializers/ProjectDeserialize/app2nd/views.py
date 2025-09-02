@@ -7,7 +7,6 @@ from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 import io
 
-
 ######## All Methods in one function 
 
 @csrf_exempt
@@ -74,6 +73,7 @@ def studentapi(req):
                 res={'msg':"Data is not found"}
                 jsondata=JSONRenderer().render(res)
                 return HttpResponse(jsondata,content_type='application/json')
+
 
 # CRUD complete Methods 
 # Create 
