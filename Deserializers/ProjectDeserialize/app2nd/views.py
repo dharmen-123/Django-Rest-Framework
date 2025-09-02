@@ -76,7 +76,7 @@ def studentapi(req):
                 return HttpResponse(jsondata,content_type='application/json')
 
 # CRUD complete Methods 
-Create 
-update
-Read
-Delete
+# Create 
+# update
+# Read
+# Delete
