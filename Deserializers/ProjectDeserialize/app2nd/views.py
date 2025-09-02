@@ -74,3 +74,9 @@ def studentapi(req):
                 res={'msg':"Data is not found"}
                 jsondata=JSONRenderer().render(res)
                 return HttpResponse(jsondata,content_type='application/json')
+
+# CRUD complete Methods 
+Create 
+update
+Read
+Delete
